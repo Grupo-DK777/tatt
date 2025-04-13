@@ -1,0 +1,42 @@
+// src/views/ErrorUsed/ErrorUsed.tsx
+
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import './ErrorUsed.css'
+
+export function ErrorUsed() {
+  const navigate = useNavigate()
+  const [seconds, setSeconds] = useState(5)
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setSeconds((prev) => {
+        if (prev === 1) {
+          clearInterval(countdown)
+          navigate('/')
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(countdown)
+  }, [navigate])
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
+      <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
+        <div className="text-yellow-400 text-4xl mb-4">⚠️</div>
+        <h1 className="text-2xl font-bold mb-2">Este código ya fue usado</h1>
+        <p className="mb-4">
+        Serás redirigido en <span className="yellow">{seconds}</span> segundos o puedes regresar ahora.
+        </p>
+        <button
+          className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition"
+          onClick={() => navigate('/')}
+        >
+          Volver
+        </button>
+      </div>
+    </div>
+  )
+}

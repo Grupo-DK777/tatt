@@ -1,0 +1,79 @@
+/* Contenedor principal para centrar el formulario */
+.formulario-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background-color: transparent; /* Fondo transparente para mantener el diseño */
+}
+
+/* Estilo del formulario */
+.formulario-container {
+  background-color: rgba(20, 18, 34, 0.8); /* Fondo translúcido */
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  color: white;
+  animation: fadeIn 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Título del formulario */
+.formulario-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* Estilo de los campos de entrada */
+.formulario-container input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin: 0.2rem 0;
+  border-radius: 0.5rem;
+  border: 2px solid #333;
+  background-color: #1f1d2b;
+  color: white;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.formulario-container input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+}
+
+.formulario-container input::placeholder {
+  color: #ccc;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+
+.formulario-container button:hover {
+  background-color: #16a34a;
+  transform: scale(1.03);
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,62 @@
+.codeinput-card h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.codeinput-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid #333;
+  background-color: #1f1d2b;
+  color: white; /* ✅ texto visible */
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.codeinput-input:focus {
+  outline: none;
+  border-color: #facc15;
+  box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.3);
+}
+
+.codeinput-input::placeholder {
+  color: #ccc;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+
+.codeinput-button {
+  width: 100%;
+  background-color: #facc15;
+  color: #000;
+  font-weight: bold;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.codeinput-button:hover {
+  background-color: #eab308;
+  transform: scale(1.02);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
