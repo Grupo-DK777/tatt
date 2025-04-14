@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Success.css';
+import { ROUTES } from '@/routes'; // ← usamos rutas centralizadas
 
 export function Success() {
   const [seconds, setSeconds] = useState(5);
@@ -10,7 +11,7 @@ export function Success() {
   useEffect(() => {
     // Si no hay estado (state), redirigir al ingreso del código
     if (!state?.codigo || !state?.instagram) {
-      navigate('/', { replace: true });
+      navigate(ROUTES.HOME, { replace: true });
     }
 
     const interval = setInterval(() => {
@@ -26,12 +27,11 @@ export function Success() {
   }, [state, navigate]);
 
   const handleRedirect = () => {
-    // Mensaje con emojis y salto de línea
     const mensaje = `Hola , he redimido mi código : *${state.codigo}*.y cumplí con los requisitos y mi usuario de Instagram es: *${state.instagram}*. ` +
                     `¡Gracias por la oportunidad!`;
     const url = `https://wa.me/573238465382?text=${encodeURIComponent(mensaje)}`;
     window.open(url, '_blank');
-    navigate('/', { replace: true }); // Redirigir al inicio y reemplazar el historial
+    navigate(ROUTES.HOME, { replace: true }); // ← usamos la ruta centralizada
   };
 
   return (

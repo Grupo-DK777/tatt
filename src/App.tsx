@@ -9,6 +9,7 @@ import AdminLogin from "./views/AdminLogin/AdminLogin";
 import { ParticlesBackground } from "./components/ParticlesBackground";
 import Layout from "./components/layout/Layout";
 import Guard from "./guards/Guard";
+import { ROUTES } from "./routes"; // ← Importamos las rutas centralizadas
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           {/* Vista del formulario sin footer */}
           <Route
-            path="/form"
+            path={ROUTES.FORM}
             element={
               <Layout excludeFooter>
                 <Formulario />
@@ -28,7 +29,7 @@ function App() {
 
           {/* Vistas públicas con footer */}
           <Route
-            path="/"
+            path={ROUTES.HOME}
             element={
               <Layout>
                 <CodeInput />
@@ -36,7 +37,7 @@ function App() {
             }
           />
           <Route
-            path="/error-used"
+            path={ROUTES.ERROR_USED}
             element={
               <Layout>
                 <ErrorUsed />
@@ -44,7 +45,7 @@ function App() {
             }
           />
           <Route
-            path="/error-invalid"
+            path={ROUTES.ERROR_INVALID}
             element={
               <Layout>
                 <ErrorInvalid />
@@ -52,7 +53,7 @@ function App() {
             }
           />
           <Route
-            path="/success"
+            path={ROUTES.SUCCESS}
             element={
               <Layout>
                 <Success />
@@ -62,7 +63,7 @@ function App() {
 
           {/* Vista de login */}
           <Route
-            path="/admin-login"
+            path={ROUTES.ADMIN_LOGIN}
             element={
               <Layout excludeFooter>
                 <AdminLogin />
@@ -72,7 +73,7 @@ function App() {
 
           {/* Ruta protegida con Guard */}
           <Route
-            path="/admin-tatto"
+            path={ROUTES.ADMIN_PANEL}
             element={
               <Guard>
                 <Layout excludeFooter>

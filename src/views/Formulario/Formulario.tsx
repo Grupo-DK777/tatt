@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Formulario.css';
+import { ROUTES } from '@/routes'; // ← importamos las rutas centralizadas
 
 export function Formulario() {
   const { state } = useLocation();
@@ -10,7 +11,7 @@ export function Formulario() {
 
   useEffect(() => {
     if (!state?.codigo) {
-      navigate('/', { replace: true });
+      navigate(ROUTES.HOME, { replace: true });
     }
 
     const fetchCampos = async () => {
@@ -35,7 +36,7 @@ export function Formulario() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const datos = {
-      tipo: 'registro', // necesario para que el script sepa que es el tipo "registro"
+      tipo: 'registro',
       codigo: state?.codigo || '',
       ...valores,
     };
@@ -53,7 +54,7 @@ export function Formulario() {
 
       const json = await res.json();
       if (json.success) {
-        navigate('/success', {
+        navigate(ROUTES.SUCCESS, {
           state: {
             codigo: datos.codigo,
             instagram: valores.instagram,

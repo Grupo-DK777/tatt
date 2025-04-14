@@ -1,26 +1,27 @@
 // src/views/ErrorUsed/ErrorUsed.tsx
 
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './ErrorUsed.css'
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './ErrorUsed.css';
+import { ROUTES } from '@/routes'; // ← usamos rutas centralizadas
 
 export function ErrorUsed() {
-  const navigate = useNavigate()
-  const [seconds, setSeconds] = useState(5)
+  const navigate = useNavigate();
+  const [seconds, setSeconds] = useState(5);
 
   useEffect(() => {
     const countdown = setInterval(() => {
       setSeconds((prev) => {
         if (prev === 1) {
-          clearInterval(countdown)
-          navigate('/')
+          clearInterval(countdown);
+          navigate(ROUTES.HOME); // ← usamos la constante
         }
-        return prev - 1
-      })
-    }, 1000)
+        return prev - 1;
+      });
+    }, 1000);
 
-    return () => clearInterval(countdown)
-  }, [navigate])
+    return () => clearInterval(countdown);
+  }, [navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
@@ -28,15 +29,15 @@ export function ErrorUsed() {
         <div className="text-yellow-400 text-4xl mb-4">⚠️</div>
         <h1 className="text-2xl font-bold mb-2">Este código ya fue usado</h1>
         <p className="mb-4">
-        Serás redirigido en <span className="yellow">{seconds}</span> segundos o puedes regresar ahora.
+          Serás redirigido en <span className="yellow">{seconds}</span> segundos o puedes regresar ahora.
         </p>
         <button
           className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition"
-          onClick={() => navigate('/')}
+          onClick={() => navigate(ROUTES.HOME)}
         >
           Volver
         </button>
       </div>
     </div>
-  )
+  );
 }
