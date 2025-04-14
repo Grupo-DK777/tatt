@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ParticlesBackground } from "./components/ParticlesBackground";
 import CodeInput from "./views/CodeInput/CodeInput";
 import { Formulario } from "./views/Formulario/Formulario";
 import { ErrorUsed } from "./views/ErrorUsed/ErrorUsed";
@@ -7,6 +6,8 @@ import { ErrorInvalid } from "./views/ErrorInvalid/ErrorInvalid";
 import { Success } from "./views/Success/Success";
 import AdminPanel from "./views/AdminPanel/AdminPanel";
 import AdminLogin from "./views/AdminLogin/AdminLogin";
+import { ParticlesBackground } from "./components/ParticlesBackground";
+import Layout from "./components/layout/Layout";
 import Guard from "./guards/Guard";
 
 function App() {
@@ -15,17 +16,68 @@ function App() {
       <ParticlesBackground />
       <main className="relative z-10 min-h-screen flex items-center justify-center p-4">
         <Routes>
-          <Route path="/" element={<CodeInput />} />
-          <Route path="/formulario" element={<Formulario />} />
-          <Route path="/error-usado" element={<ErrorUsed />} />
-          <Route path="/error-invalido" element={<ErrorInvalid />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
+          {/* Vista del formulario sin footer */}
           <Route
-            path="/admin-tatto/*"
+            path="/form"
+            element={
+              <Layout excludeFooter>
+                <Formulario />
+              </Layout>
+            }
+          />
+
+          {/* Vistas públicas con footer */}
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <CodeInput />
+              </Layout>
+            }
+          />
+          <Route
+            path="/error-used"
+            element={
+              <Layout>
+                <ErrorUsed />
+              </Layout>
+            }
+          />
+          <Route
+            path="/error-invalid"
+            element={
+              <Layout>
+                <ErrorInvalid />
+              </Layout>
+            }
+          />
+          <Route
+            path="/gracias"
+            element={
+              <Layout>
+                <Success />
+              </Layout>
+            }
+          />
+
+          {/* Vista de login */}
+          <Route
+            path="/admin-login"
+            element={
+              <Layout excludeFooter>
+                <AdminLogin />
+              </Layout>
+            }
+          />
+
+          {/* Ruta protegida con Guard */}
+          <Route
+            path="/admin-tatto"
             element={
               <Guard>
-                <AdminPanel />
+                <Layout excludeFooter>
+                  <AdminPanel />
+                </Layout>
               </Guard>
             }
           />
