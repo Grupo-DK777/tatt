@@ -9,12 +9,10 @@ export function Formulario() {
   const [valores, setValores] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    // Si no hay estado (state), redirigir al ingreso del código
     if (!state?.codigo) {
       navigate('/', { replace: true });
     }
 
-    // Cargar campos desde Google Sheets
     const fetchCampos = async () => {
       try {
         const res = await fetch(import.meta.env.VITE_SHEETS_CAMPOS_URL);
@@ -37,21 +35,35 @@ export function Formulario() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const datos = {
+      tipo: 'registro', // necesario para que el script sepa que es el tipo "registro"
       codigo: state?.codigo || '',
       ...valores,
     };
 
+    const body = new URLSearchParams(datos).toString();
+
     try {
       const res = await fetch(import.meta.env.VITE_SHEETS_REGISTRO_URL, {
         method: 'POST',
-        body: JSON.stringify(datos),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body,
       });
+
       const json = await res.json();
       if (json.success) {
-        navigate('/success', { state: { codigo: datos.codigo, instagram: valores.instagram }, replace: true });
+        navigate('/success', {
+          state: {
+            codigo: datos.codigo,
+            instagram: valores.instagram,
+          },
+          replace: true,
+        });
       }
     } catch (error) {
       alert('Error al enviar.');
+      console.error(error);
     }
   };
 

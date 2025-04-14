@@ -52,7 +52,7 @@ function App() {
             }
           />
           <Route
-            path="/gracias"
+            path="/success"
             element={
               <Layout>
                 <Success />
