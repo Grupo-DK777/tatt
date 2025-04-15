@@ -27,7 +27,7 @@ export default function Footer() {
               <a href="https://instagram.com/willart0921" target="_blank" rel="noopener noreferrer">
                 <Instagram className="footer-icon" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" title="X (antes Twitter)">
                 <X className="footer-icon" />
               </a>
             </div>
