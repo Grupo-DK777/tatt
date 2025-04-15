@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '@/views/CodeInput/CodeInput.css';
 import { ROUTES } from '@/routes';
+import TermsModal from '@/components/TermsModal/TermsModal';
 
 const SHEET_URL = import.meta.env.VITE_SHEETS_CODIGOS_URL;
 
@@ -11,6 +12,7 @@ export default function CodeInput() {
   const [loading, setLoading] = useState(false);
   const [errorCodigo, setErrorCodigo] = useState('');
   const [errorCheckbox, setErrorCheckbox] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const validateCode = async () => {
@@ -88,7 +90,7 @@ export default function CodeInput() {
           <p className="text-sm text-red-400 mt-1">{errorCodigo}</p>
         )}
 
-        <label className="text-sm text-white mt-4 flex items-center gap-2">
+        <label className="text-sm text-white mt-4 flex items-center gap-2 text-left">
           <input
             type="checkbox"
             checked={aceptaTerminos}
@@ -97,14 +99,13 @@ export default function CodeInput() {
           />
           <span>
             Acepto los{' '}
-            <a
-              href="/terminos"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-yellow-400 hover:text-yellow-500 transition no-underline"
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="text-yellow-400 hover:text-yellow-500 transition no-underline underline-offset-2"
             >
               términos y condiciones
-            </a>
+            </button>
           </span>
         </label>
         {errorCheckbox && (
@@ -119,6 +120,15 @@ export default function CodeInput() {
           {loading ? 'Validando...' : 'Validar código'}
         </button>
       </div>
+
+      {showModal && (
+        <TermsModal
+          onAccept={() => {
+            setAceptaTerminos(true);
+            setShowModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }

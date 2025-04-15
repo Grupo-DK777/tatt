@@ -7,5 +7,4 @@ export const ROUTES = {
   ERROR_USED: '/error-used',
   ADMIN_LOGIN: '/admin-login',
   ADMIN_PANEL: '/admin-tatto',
-  TERMINOS: '/terminos', // ← Nueva ruta agregada
 };

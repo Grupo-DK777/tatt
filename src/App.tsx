@@ -9,7 +9,6 @@ import AdminLogin from "./views/AdminLogin/AdminLogin";
 import { ParticlesBackground } from "./components/ParticlesBackground";
 import Guard from "./guards/Guard";
 import { ROUTES } from "./routes";
-import { Terminos } from "./views/Terminos/Terminos";
 import Footer from "./components/Footer"; // ← Se importa solo una vez
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
             <Route path={ROUTES.ERROR_USED} element={<ErrorUsed />} />
             <Route path={ROUTES.ERROR_INVALID} element={<ErrorInvalid />} />
             <Route path={ROUTES.SUCCESS} element={<Success />} />
-            <Route path={ROUTES.TERMINOS} element={<Terminos />} />
             <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin />} />
             <Route
               path={ROUTES.ADMIN_PANEL}
