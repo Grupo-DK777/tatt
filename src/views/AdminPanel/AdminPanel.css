@@ -1,42 +1,125 @@
 .admin-container {
-    display: flex;
-    min-height: 100vh;
-    background: #f9f9f9;
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: white
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 250px;
+  color: white;
+  padding: 2rem 1rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: black;
+}
+
+.sidebar h2 {
+  font-size: 1.5rem;
+  margin: 1rem 0 1.5rem;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.sidebar li {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.sidebar button {
+  background: none;
+  border: none;
+  color: #ffffffb0;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s, font-weight 0.3s;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* BOTÓN DE CERRAR SESIÓN */
+.logout-section {
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.logout-button {
+  background-color: #ef4444;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #dc2626;
+}
+
+/* MAIN PANEL */
+.main-panel {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+.panel-content {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* TÍTULOS */
+.main-panel h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .admin-container {
+    flex-direction: column;
   }
-  
+
   .sidebar {
-    width: 250px;
-    background-color: #1f2937;
-    color: white;
-    padding: 2rem 1rem;
+    width: 100%;
+    text-align: center;
   }
-  
-  .sidebar h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    margin: 1rem 0;
-  }
-  
-  .sidebar a {
-    color: #ffffffb0;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .sidebar a:hover {
-    color: white;
-  }
-  
+
   .main-panel {
-    flex: 1;
-    padding: 2rem;
+    padding: 1rem;
   }
-  
+}
+
+/* ANIMACIÓN */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+}

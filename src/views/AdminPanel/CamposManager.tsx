@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getCampos, addCampo, deleteCampo } from "../../services/admin-sheets";
+import "./AdminTables.css";
 
 interface Campo {
   nombre: string;
@@ -18,6 +19,9 @@ export default function CamposManager() {
     requerido: "FALSE",
   });
 
+  const [pagina, setPagina] = useState(1);
+  const porPagina = 10;
+
   useEffect(() => {
     cargarCampos();
   }, []);
@@ -30,7 +34,6 @@ export default function CamposManager() {
         : Array.isArray(response.campos)
         ? response.campos
         : [];
-
       setCampos(data);
     } catch (err) {
       console.error("Error al cargar campos:", err);
@@ -49,12 +52,18 @@ export default function CamposManager() {
     try {
       const resultado = await addCampo({
         ...nuevoCampo,
-        requerido: nuevoCampo.requerido === "TRUE" || nuevoCampo.requerido === true,
+        requerido:
+          nuevoCampo.requerido === "TRUE" || nuevoCampo.requerido === true,
       });
 
       if (resultado.success) {
         Swal.fire("Agregado", "Campo guardado en Google Sheets", "success");
-        setNuevoCampo({ nombre: "", label: "", tipo: "", requerido: "FALSE" });
+        setNuevoCampo({
+          nombre: "",
+          label: "",
+          tipo: "",
+          requerido: "FALSE",
+        });
         cargarCampos();
       } else {
         Swal.fire("Error", "No se pudo guardar el campo", "error");
@@ -97,29 +106,61 @@ export default function CamposManager() {
     setNuevoCampo({ ...nuevoCampo, [name]: value });
   };
 
+  const totalPaginas = Math.ceil(campos.length / porPagina);
+  const camposPaginados = campos.slice(
+    (pagina - 1) * porPagina,
+    pagina * porPagina
+  );
+
+  const generarRangoPaginado = () => {
+    const paginas: (number | "...")[] = [];
+    if (totalPaginas <= 5) {
+      for (let i = 1; i <= totalPaginas; i++) paginas.push(i);
+    } else {
+      paginas.push(1);
+      if (pagina > 3) paginas.push("...");
+      for (
+        let i = Math.max(2, pagina - 1);
+        i <= Math.min(totalPaginas - 1, pagina + 1);
+        i++
+      ) {
+        paginas.push(i);
+      }
+      if (pagina < totalPaginas - 2) paginas.push("...");
+      paginas.push(totalPaginas);
+    }
+    return paginas;
+  };
+
   return (
-    <div className="space-y-6">
-      <table className="w-full border text-sm text-left">
-        <thead className="bg-gray-200">
+    <div className="tabla-wrapper">
+      <table className="tabla-admin">
+        <thead>
           <tr>
-            <th className="p-2">Nombre</th>
-            <th className="p-2">Label</th>
-            <th className="p-2">Tipo</th>
-            <th className="p-2">Requerido</th>
-            <th className="p-2">Acciones</th>
+            <th>Nombre</th>
+            <th>Label</th>
+            <th>Tipo</th>
+            <th>Requerido</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {campos.map((campo, i) => (
-            <tr key={i} className="border-t">
-              <td className="p-2">{campo.nombre}</td>
-              <td className="p-2">{campo.label}</td>
-              <td className="p-2">{campo.tipo}</td>
-              <td className="p-2">{campo.requerido === true || campo.requerido === "TRUE" ? "Sí" : "No"}</td>
-              <td className="p-2">
+          {camposPaginados.map((campo, i) => (
+            <tr key={i}>
+              <td>{campo.nombre}</td>
+              <td>{campo.label}</td>
+              <td>{campo.tipo}</td>
+              <td>
+                {campo.requerido === true || campo.requerido === "TRUE"
+                  ? "Sí"
+                  : "No"}
+              </td>
+              <td>
                 <button
-                  className="bg-red-500 text-white text-xs px-2 py-1 rounded"
-                  onClick={() => eliminarCampo(i)}
+                  className="boton-eliminar"
+                  onClick={() =>
+                    eliminarCampo((pagina - 1) * porPagina + i)
+                  }
                 >
                   Eliminar
                 </button>
@@ -129,34 +170,71 @@ export default function CamposManager() {
         </tbody>
       </table>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Paginación moderna */}
+      {totalPaginas > 1 && (
+        <div className="pagination">
+          <button
+            className="naked-arrow"
+            disabled={pagina === 1}
+            onClick={() => setPagina(pagina - 1)}
+          >
+            ⬅️
+          </button>
+
+          {generarRangoPaginado().map((num, i) =>
+            num === "..." ? (
+              <span key={i} className="ellipsis">
+                ...
+              </span>
+            ) : (
+              <button
+                key={i}
+                className={`page-button ${
+                  pagina === num
+                    ? "bg-indigo-600"
+                    : "bg-gray-700 hover:bg-gray-600"
+                }`}
+                onClick={() => setPagina(Number(num))}
+              >
+                {num}
+              </button>
+            )
+          )}
+
+          <button
+            className="naked-arrow"
+            disabled={pagina === totalPaginas}
+            onClick={() => setPagina(pagina + 1)}
+          >
+            ➡️
+          </button>
+        </div>
+      )}
+
+      <div className="inputs-tabla">
         <input
           type="text"
           name="nombre"
-          placeholder="nombre"
-          className="border px-2 py-1 bg-white text-black"
+          placeholder="Nombre"
           value={nuevoCampo.nombre}
           onChange={handleInputChange}
         />
         <input
           type="text"
           name="label"
-          placeholder="label"
-          className="border px-2 py-1 bg-white text-black"
+          placeholder="Label"
           value={nuevoCampo.label}
           onChange={handleInputChange}
         />
         <input
           type="text"
           name="tipo"
-          placeholder="tipo"
-          className="border px-2 py-1 bg-white text-black"
+          placeholder="Tipo"
           value={nuevoCampo.tipo}
           onChange={handleInputChange}
         />
         <select
           name="requerido"
-          className="border px-2 py-1 bg-white text-black"
           value={nuevoCampo.requerido.toString()}
           onChange={handleInputChange}
         >
@@ -165,10 +243,7 @@ export default function CamposManager() {
         </select>
       </div>
 
-      <button
-        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-        onClick={agregarCampo}
-      >
+      <button className="boton-agregar" onClick={agregarCampo}>
         Agregar Campo
       </button>
     </div>
