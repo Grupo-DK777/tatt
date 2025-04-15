@@ -13,7 +13,30 @@ export default function CodeInput() {
   const [errorCodigo, setErrorCodigo] = useState('');
   const [errorCheckbox, setErrorCheckbox] = useState('');
   const [showModal, setShowModal] = useState(false);
+
+  const [totalCodigos, setTotalCodigos] = useState(0);
+  const [codigosDisponibles, setCodigosDisponibles] = useState(0);
+
   const navigate = useNavigate();
+
+  const fetchCodigos = async () => {
+    try {
+      const res = await fetch(SHEET_URL);
+      const data = await res.json();
+      const codigos = data.codigos;
+
+      const disponibles = codigos.filter(
+        (c: any) =>
+          String(c.usado).trim().toLowerCase() !== 'true' &&
+          String(c.usado).trim().toLowerCase() !== '1'
+      );
+
+      setTotalCodigos(codigos.length);
+      setCodigosDisponibles(disponibles.length);
+    } catch (err) {
+      console.error('Error al obtener los códigos:', err);
+    }
+  };
 
   const validateCode = async () => {
     let valid = true;
@@ -65,6 +88,8 @@ export default function CodeInput() {
   };
 
   useEffect(() => {
+    fetchCodigos();
+
     const listener = (e: KeyboardEvent) => {
       if (e.key === 'Enter') validateCode();
     };
@@ -72,6 +97,19 @@ export default function CodeInput() {
     window.addEventListener('keydown', listener);
     return () => window.removeEventListener('keydown', listener);
   }, [codigo, aceptaTerminos]);
+
+  const porcentajeUsados =
+    totalCodigos > 0
+      ? Math.round(((totalCodigos - codigosDisponibles) / totalCodigos) * 100)
+      : 0;
+
+  // Asignar clase de color según porcentaje usado
+  const getBarColorClass = () => {
+    if (codigosDisponibles === 0) return 'barra-roja';
+    if (porcentajeUsados >= 70) return 'barra-roja';
+    if (porcentajeUsados >= 30) return 'barra-amarilla';
+    return 'barra-verde';
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
@@ -115,10 +153,31 @@ export default function CodeInput() {
         <button
           className="codeinput-button mt-4"
           onClick={validateCode}
-          disabled={loading}
+          disabled={loading || codigosDisponibles === 0}
         >
-          {loading ? 'Validando...' : 'Validar código'}
+          {codigosDisponibles === 0
+            ? 'Sin disponibilidad'
+            : loading
+            ? 'Validando...'
+            : 'Validar código'}
         </button>
+
+        {/* Barra de porcentaje debajo */}
+        <div className="mt-6 w-full text-sm text-left">
+          <p className="mb-1 text-white">
+            {codigosDisponibles === 0 ? (
+              <span className="text-red-500 font-semibold">¡Sin códigos disponibles!</span>
+            ) : (
+              <>Disponibles: <span className="text-yellow-400">{codigosDisponibles}</span> de {totalCodigos} códigos</>
+            )}
+          </p>
+          <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+            <div
+              className={`h-full transition-all duration-300 ${getBarColorClass()}`}
+              style={{ width: `${porcentajeUsados}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       {showModal && (

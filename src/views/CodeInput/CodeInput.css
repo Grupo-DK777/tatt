@@ -16,7 +16,7 @@
   border-radius: 0.5rem;
   border: 2px solid #333;
   background-color: #1f1d2b;
-  color: white; /* ✅ texto visible */
+  color: white;
   font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -56,6 +56,44 @@
 
 input[type="checkbox"].outline-red-500 {
   outline: 2px solid red;
+}
+
+/* Barra de porcentaje de códigos disponibles */
+.codeinput-progress-container {
+  margin-top: 1.5rem;
+  width: 100%;
+  text-align: left;
+}
+
+.codeinput-progress-text {
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin-bottom: 0.25rem;
+}
+
+.codeinput-progress-bar {
+  height: 12px;
+  border-radius: 6px;
+  background-color: #374151;
+  overflow: hidden;
+}
+
+.codeinput-progress-fill {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+/* Colores según nivel de uso */
+.barra-verde {
+  background-color: #22c55e; /* verde */
+}
+
+.barra-amarilla {
+  background-color: #facc15; /* amarillo */
+}
+
+.barra-roja {
+  background-color: #ef4444; /* rojo */
 }
 
 @keyframes fadeIn {
