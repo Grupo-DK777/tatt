@@ -78,6 +78,7 @@ export function Formulario() {
   return (
     <div className="formulario-wrapper">
       <form onSubmit={handleSubmit} className="formulario-container">
+        <img src="src/public/favicon.png" alt="Logo" className="codeinput-logo mb-2" />
         <h2 className="formulario-title flex items-center justify-center gap-2 text-white text-lg font-bold whitespace-nowrap">
           🎯 Completa tu registro
         </h2>

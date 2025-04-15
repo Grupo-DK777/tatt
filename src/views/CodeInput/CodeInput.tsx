@@ -103,7 +103,6 @@ export default function CodeInput() {
       ? Math.round(((totalCodigos - codigosDisponibles) / totalCodigos) * 100)
       : 0;
 
-  // Asignar clase de color según porcentaje usado
   const getBarColorClass = () => {
     if (codigosDisponibles === 0) return 'barra-roja';
     if (porcentajeUsados >= 70) return 'barra-roja';
@@ -114,7 +113,13 @@ export default function CodeInput() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
       <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
-        <h1 className="text-2xl font-semibold text-white text-center mb-4">🎁 Valida tu código</h1>
+
+        {/* ✅ Logo arriba del título */}
+        <img src="src\public\favicon.png" alt="Logo" className="codeinput-logo" />
+
+        <h1 className="text-2xl font-semibold text-white text-center mb-4">
+          🎁 Valida tu código
+        </h1>
 
         <input
           type="text"
@@ -124,9 +129,7 @@ export default function CodeInput() {
           onChange={(e) => setCodigo(e.target.value)}
           disabled={loading}
         />
-        {errorCodigo && (
-          <p className="text-sm text-red-400 mt-1">{errorCodigo}</p>
-        )}
+        {errorCodigo && <p className="text-sm text-red-400 mt-1">{errorCodigo}</p>}
 
         <label className="text-sm text-white mt-4 flex items-center gap-2 text-left">
           <input
@@ -146,9 +149,7 @@ export default function CodeInput() {
             </button>
           </span>
         </label>
-        {errorCheckbox && (
-          <p className="text-sm text-red-400 mt-1">{errorCheckbox}</p>
-        )}
+        {errorCheckbox && <p className="text-sm text-red-400 mt-1">{errorCheckbox}</p>}
 
         <button
           className="codeinput-button mt-4"
