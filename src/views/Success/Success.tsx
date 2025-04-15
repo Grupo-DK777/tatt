@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Success.css';
 import { ROUTES } from '@/routes';
+import logo from '@/public/favicon.png';
 
 export function Success() {
   const [seconds, setSeconds] = useState(5);
@@ -36,7 +37,11 @@ export function Success() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
       <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
-        <img src="src/public/favicon.png" alt="Logo" className="codeinput-logo mb-3" />
+      <img 
+  src={logo}  
+  alt="Logo" 
+  className="codeinput-logo"
+/>
         <div className="success-icon">🎉</div>
         <h2 className="success-title">¡Registro exitoso!</h2>
         <p className="success-text">

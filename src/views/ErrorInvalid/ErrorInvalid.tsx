@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ErrorInvalid.css';
 import { ROUTES } from '@/routes';
+import logo from '@/public/favicon.png';
 
 export function ErrorInvalid() {
   const [count, setCount] = useState(5);
@@ -20,7 +21,11 @@ export function ErrorInvalid() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
       <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
-        <img src="src/public/favicon.png" alt="Logo" className="codeinput-logo mb-4" />
+      <img 
+  src={logo}  
+  alt="Logo" 
+  className="codeinput-logo"
+/>
         <div className="text-3xl text-red-500 mb-2">❌</div>
         <h1 className="text-xl font-bold text-white mb-4">Código no válido</h1>
         <p className="text-white text-sm mb-4">

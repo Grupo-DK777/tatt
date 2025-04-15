@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ErrorUsed.css';
 import { ROUTES } from '@/routes';
+import logo from '@/public/favicon.png';
 
 export function ErrorUsed() {
   const navigate = useNavigate();
@@ -24,7 +25,11 @@ export function ErrorUsed() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
       <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
-        <img src="src/public/favicon.png" alt="Logo" className="codeinput-logo mb-4" />
+      <img 
+  src={logo}  
+  alt="Logo" 
+  className="codeinput-logo"
+/>
         <div className="text-yellow-400 text-4xl mb-4">⚠️</div>
         <h1 className="text-2xl font-bold mb-2">Este código ya fue usado</h1>
         <p className="mb-4">
