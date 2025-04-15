@@ -78,7 +78,9 @@ export function Formulario() {
   return (
     <div className="formulario-wrapper">
       <form onSubmit={handleSubmit} className="formulario-container">
-        <h2 className="formulario-title">🎯 Completa tu registro</h2>
+        <h2 className="formulario-title flex items-center justify-center gap-2 text-white text-lg font-bold whitespace-nowrap">
+          🎯 Completa tu registro
+        </h2>
         {campos.map((campo) => (
           <input
             key={campo}

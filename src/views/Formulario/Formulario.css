@@ -4,12 +4,12 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Ocupa toda la altura de la pantalla */
-  background-color: transparent; /* Fondo transparente para mantener el diseño */
+  background-color: transparent;
 }
 
 /* Estilo del formulario */
 .formulario-container {
-  background-color: rgba(20, 18, 34, 0.8); /* Fondo translúcido */
+  background-color: rgba(20, 18, 34, 0.8);
   padding: 2rem;
   border-radius: 1rem;
   max-width: 400px;
@@ -29,14 +29,15 @@
 .formulario-title {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap; /* 👈 fuerza que esté en una línea */
 }
 
-/* Estilo de los campos de entrada */
+/* Campos de entrada */
 .formulario-container input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -61,6 +62,7 @@
   letter-spacing: 0.5px;
 }
 
+/* Botón */
 .formulario-container button:hover {
   background-color: #16a34a;
   transform: scale(1.03);
