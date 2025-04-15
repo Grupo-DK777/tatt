@@ -1,10 +1,10 @@
 // admin-sheets.ts
 
-const BASE_URL = import.meta.env.VITE_SHEETS_BASE_URL;
+const BASE_SHEETS_URL = import.meta.env.VITE_SHEETS_BASE_URL;
 
 // ----- CAMPOS -----
 export const getCampos = async () => {
-  const res = await fetch(`${BASE_URL}?tipo=campos`);
+  const res = await fetch(`${BASE_SHEETS_URL}?tipo=campos`);
   return res.json();
 };
 
@@ -21,11 +21,9 @@ export const addCampo = async (campo: {
   params.append("tipo", campo.tipo);
   params.append("requerido", campo.requerido.toString());
 
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(BASE_SHEETS_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
   });
 
@@ -33,15 +31,23 @@ export const addCampo = async (campo: {
 };
 
 export const deleteCampo = async (index: number) => {
-  const res = await fetch(`${BASE_URL}?tipo=campos&index=${index}`, {
-    method: "DELETE",
+  const params = new URLSearchParams();
+  params.append("tipo", "campos");
+  params.append("modo", "eliminar");
+  params.append("index", index.toString());
+
+  const res = await fetch(BASE_SHEETS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
   });
+
   return res.json();
 };
 
 // ----- CÓDIGOS -----
 export const getCodigos = async () => {
-  const res = await fetch(`${BASE_URL}?tipo=codigos`);
+  const res = await fetch(`${BASE_SHEETS_URL}?tipo=codigos`);
   return res.json();
 };
 
@@ -50,11 +56,9 @@ export const addCodigo = async (codigo: { codigo: string }) => {
   params.append("tipo", "codigos");
   params.append("codigo", codigo.codigo);
 
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(BASE_SHEETS_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
   });
 
@@ -62,21 +66,37 @@ export const addCodigo = async (codigo: { codigo: string }) => {
 };
 
 export const deleteCodigo = async (index: number) => {
-  const res = await fetch(`${BASE_URL}?tipo=codigos&index=${index}`, {
-    method: "DELETE",
+  const params = new URLSearchParams();
+  params.append("tipo", "codigos");
+  params.append("modo", "eliminar");
+  params.append("index", index.toString());
+
+  const res = await fetch(BASE_SHEETS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
   });
+
   return res.json();
 };
 
 // ----- REGISTROS -----
 export const getRegistros = async () => {
-  const res = await fetch(`${BASE_URL}?tipo=registro`);
+  const res = await fetch(`${BASE_SHEETS_URL}?tipo=registro`);
   return res.json();
 };
 
 export const deleteRegistro = async (index: number) => {
-  const res = await fetch(`${BASE_URL}?tipo=registro&index=${index}`, {
-    method: "DELETE",
+  const params = new URLSearchParams();
+  params.append("tipo", "registro");
+  params.append("modo", "eliminar");
+  params.append("index", index.toString());
+
+  const res = await fetch(BASE_SHEETS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
   });
+
   return res.json();
 };

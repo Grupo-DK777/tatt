@@ -52,18 +52,12 @@ export default function CamposManager() {
     try {
       const resultado = await addCampo({
         ...nuevoCampo,
-        requerido:
-          nuevoCampo.requerido === "TRUE" || nuevoCampo.requerido === true,
+        requerido: nuevoCampo.requerido === "TRUE" || nuevoCampo.requerido === true,
       });
 
       if (resultado.success) {
         Swal.fire("Agregado", "Campo guardado en Google Sheets", "success");
-        setNuevoCampo({
-          nombre: "",
-          label: "",
-          tipo: "",
-          requerido: "FALSE",
-        });
+        setNuevoCampo({ nombre: "", label: "", tipo: "", requerido: "FALSE" });
         cargarCampos();
       } else {
         Swal.fire("Error", "No se pudo guardar el campo", "error");
@@ -85,15 +79,18 @@ export default function CamposManager() {
       if (res.isConfirmed) {
         try {
           const resultado = await deleteCampo(index);
+          console.log("Respuesta al eliminar campo:", resultado);
+
           if (resultado.success) {
             Swal.fire("Eliminado", "Campo eliminado", "success");
             cargarCampos();
           } else {
-            Swal.fire("Error", "No se pudo eliminar el campo", "error");
+            Swal.fire("Error", resultado.error || "No se pudo eliminar el campo", "error");
           }
-        } catch (err) {
+        } catch (err: any) {
           console.error("Error al eliminar:", err);
-          Swal.fire("Error", "No se pudo eliminar el campo", "error");
+          const msg = err?.message || "No se pudo eliminar el campo";
+          Swal.fire("Error", msg, "error");
         }
       }
     });
@@ -150,17 +147,11 @@ export default function CamposManager() {
               <td>{campo.nombre}</td>
               <td>{campo.label}</td>
               <td>{campo.tipo}</td>
-              <td>
-                {campo.requerido === true || campo.requerido === "TRUE"
-                  ? "Sí"
-                  : "No"}
-              </td>
+              <td>{campo.requerido === true || campo.requerido === "TRUE" ? "Sí" : "No"}</td>
               <td>
                 <button
                   className="boton-eliminar"
-                  onClick={() =>
-                    eliminarCampo((pagina - 1) * porPagina + i)
-                  }
+                  onClick={() => eliminarCampo((pagina - 1) * porPagina + i)}
                 >
                   Eliminar
                 </button>
@@ -170,7 +161,6 @@ export default function CamposManager() {
         </tbody>
       </table>
 
-      {/* Paginación moderna */}
       {totalPaginas > 1 && (
         <div className="pagination">
           <button
@@ -190,9 +180,7 @@ export default function CamposManager() {
               <button
                 key={i}
                 className={`page-button ${
-                  pagina === num
-                    ? "bg-indigo-600"
-                    : "bg-gray-700 hover:bg-gray-600"
+                  pagina === num ? "bg-indigo-600" : "bg-gray-700 hover:bg-gray-600"
                 }`}
                 onClick={() => setPagina(Number(num))}
               >
