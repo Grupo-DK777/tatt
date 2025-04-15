@@ -17,7 +17,6 @@ export const addCampo = async (campo: {
   requerido: string | boolean;
 }) => {
   const params = new URLSearchParams();
-  params.append("tipo", "campos");
   params.append("nombre", campo.nombre);
   params.append("label", campo.label);
   params.append("tipo", campo.tipo);
@@ -35,9 +34,8 @@ export const addCampo = async (campo: {
 };
 
 export const deleteCampo = async (index: number) => {
-  const res = await fetch(`${CAMPOS_URL}?tipo=campos&index=${index}`, {
-    method: "DELETE",
-  });
+  const url = `${CAMPOS_URL}&index=${index}`;
+  const res = await fetch(url, { method: "DELETE" });
   return res.json();
 };
 
@@ -49,7 +47,6 @@ export const getCodigos = async () => {
 
 export const addCodigo = async (codigo: { codigo: string }) => {
   const params = new URLSearchParams();
-  params.append("tipo", "codigos");
   params.append("codigo", codigo.codigo);
 
   const res = await fetch(CODIGOS_URL, {
@@ -64,9 +61,8 @@ export const addCodigo = async (codigo: { codigo: string }) => {
 };
 
 export const deleteCodigo = async (index: number) => {
-  const res = await fetch(`${CODIGOS_URL}?tipo=codigos&index=${index}`, {
-    method: "DELETE",
-  });
+  const url = `${CODIGOS_URL}&index=${index}`;
+  const res = await fetch(url, { method: "DELETE" });
   return res.json();
 };
 
@@ -77,8 +73,7 @@ export const getRegistros = async () => {
 };
 
 export const deleteRegistro = async (index: number) => {
-  const res = await fetch(`${REGISTRO_URL}?tipo=registro&index=${index}`, {
-    method: "DELETE",
-  });
+  const url = `${REGISTRO_URL}&index=${index}`;
+  const res = await fetch(url, { method: "DELETE" });
   return res.json();
 };
