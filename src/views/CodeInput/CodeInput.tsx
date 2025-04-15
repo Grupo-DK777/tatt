@@ -115,7 +115,7 @@ export default function CodeInput() {
       <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
 
         {/* ✅ Logo arriba del título */}
-        <img src="src\public\favicon.png" alt="Logo" className="codeinput-logo" />
+        <img src="/favicon.png" alt="Logo" className="codeinput-logo" />
 
         <h1 className="text-2xl font-semibold text-white text-center mb-4">
           🎁 Valida tu código
