@@ -7,19 +7,21 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  isLogged: localStorage.getItem("admin_logged") === "true",
+  isLogged: sessionStorage.getItem("admin_logged") === "true",
   login: (username, password) => {
     const validUser = import.meta.env.VITE_ADMIN_USER;
     const validPass = import.meta.env.VITE_ADMIN_PASS;
     const success = username === validUser && password === validPass;
     if (success) {
-      localStorage.setItem("admin_logged", "true");
+      sessionStorage.setItem("admin_logged", "true");
+      sessionStorage.setItem("admin_last_active", Date.now().toString());
       set({ isLogged: true });
     }
     return success;
   },
   logout: () => {
-    localStorage.removeItem("admin_logged");
+    sessionStorage.removeItem("admin_logged");
+    sessionStorage.removeItem("admin_last_active");
     set({ isLogged: false });
   },
 }));

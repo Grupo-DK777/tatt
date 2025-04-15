@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 import "./AdminLogin.css";
@@ -15,12 +15,33 @@ export default function AdminLogin() {
     e.preventDefault();
     const success = login(username, password);
     if (success) {
+      // Guarda la marca de tiempo de actividad inicial
+      sessionStorage.setItem("admin_last_active", Date.now().toString());
       const redirect = location.state?.from?.pathname || "/admin-tatto";
       navigate(redirect);
     } else {
       setError("Usuario o contraseña incorrecta");
     }
   };
+
+  // 🔁 Monitorea actividad y reinicia temporizador
+  useEffect(() => {
+    const updateLastActive = () => {
+      if (sessionStorage.getItem("admin_logged") === "true") {
+        sessionStorage.setItem("admin_last_active", Date.now().toString());
+      }
+    };
+
+    window.addEventListener("mousemove", updateLastActive);
+    window.addEventListener("keydown", updateLastActive);
+    window.addEventListener("click", updateLastActive);
+
+    return () => {
+      window.removeEventListener("mousemove", updateLastActive);
+      window.removeEventListener("keydown", updateLastActive);
+      window.removeEventListener("click", updateLastActive);
+    };
+  }, []);
 
   return (
     <div className="admin--wrapper">
