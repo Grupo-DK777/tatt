@@ -1,85 +1,88 @@
 .footer {
-    width: 100%;
-    box-sizing: border-box;
-    background-color: rgba(28, 27, 42, 0.8); /* ✅ mismo color */
-    color: white;
-    z-index: 50;
-    border-radius: 1rem 1rem 0 0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* ✅ misma sombra */
-    animation: fadeIn 0.5s ease;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: rgba(28, 27, 42, 0.8);
+  color: white;
+  z-index: 50;
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .footer-content {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 3rem 1rem;
-  }
-  
+}
+
+.footer-content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+.footer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footer h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.footer-section {
+  margin-top: 1rem;
+}
+
+.footer-section p {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+/* Íconos sociales con imágenes SVG */
+.footer-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.footer-icons img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%); /* blanco en fondo oscuro */
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.footer-icons img:hover {
+  transform: scale(1.1);
+  filter: invert(75%) sepia(50%) saturate(600%) hue-rotate(220deg);
+}
+
+/* Línea final */
+.footer-bottom {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #374151;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
   .footer-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
-  
-  .footer h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-  }
-  
+
   .footer-section {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
-  
-  .footer-section p {
-    margin-bottom: 0.5rem;
-    line-height: 1.4;
-  }
-  
-  /* Íconos sociales */
-  .footer-icons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .footer-icons a {
-    color: white;
-    transition: color 0.2s ease-in-out;
-  }
-  
-  .footer-icons a:hover {
-    color: #818cf8;
-  }
-  
-  /* Línea final */
-  .footer-bottom {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid #374151;
-    text-align: center;
-    font-size: 0.875rem;
-  }
-  
-  @media (min-width: 768px) {
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-  
-    .footer-section {
-      margin-top: 1.5rem;
-    }
-  }
-  
+}

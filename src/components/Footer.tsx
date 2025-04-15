@@ -1,5 +1,5 @@
-import { Facebook, Instagram, Twitter } from 'lucide-react';
-import './Footer.css'; // ← Importa el CSS externo
+import './Footer.css';
+import { Facebook, Instagram, X } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,23 +12,23 @@ export default function Footer() {
           <div>
             <h3>Contacto</h3>
             <div className="footer-section">
-              <p>Email: info@empresa.com</p>
-              <p>Teléfono: +57 300 123 4567</p>
+              <p>Email: caicepipo@gmail.com</p>
+              <p>Teléfono: <a href="https://wa.me/573238465382" target="_blank" rel="noopener noreferrer">+57 323 846 5382</a></p>
             </div>
           </div>
 
-          {/* Redes */}
+          {/* Redes sociales SOLO íconos */}
           <div>
             <h3>Síguenos</h3>
             <div className="footer-icons">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                <Facebook className="h-6 w-6" />
+              <a href="https://www.facebook.com/wilfrido.caicedo.73" target="_blank" rel="noopener noreferrer">
+                <Facebook className="footer-icon" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                <Instagram className="h-6 w-6" />
+              <a href="https://instagram.com/willart0921" target="_blank" rel="noopener noreferrer">
+                <Instagram className="footer-icon" />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                <Twitter className="h-6 w-6" />
+                <X className="footer-icon" />
               </a>
             </div>
           </div>
@@ -37,8 +37,8 @@ export default function Footer() {
           <div>
             <h3>Horario</h3>
             <div className="footer-section">
-              <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
-              <p>Sábados: 9:00 AM - 1:00 PM</p>
+              <p>Lunes a Domingo:</p>
+              <p>9:00 AM - 8:00 PM</p>
             </div>
           </div>
         </div>
