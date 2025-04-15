@@ -50,6 +50,14 @@
   transform: scale(1.02);
 }
 
+.codeinput-input:disabled {
+  opacity: 0.6;
+}
+
+input[type="checkbox"].outline-red-500 {
+  outline: 2px solid red;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

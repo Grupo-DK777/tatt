@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Formulario.css';
-import { ROUTES } from '@/routes'; // ← importamos las rutas centralizadas
+import { ROUTES } from '@/routes';
 
 export function Formulario() {
   const { state } = useLocation();
@@ -68,6 +68,13 @@ export function Formulario() {
     }
   };
 
+  const formularioCompleto =
+    campos.length > 0 &&
+    campos.every((campo) => {
+      const valor = valores[campo];
+      return typeof valor === 'string' && valor.trim().length > 0;
+    });
+
   return (
     <div className="formulario-wrapper">
       <form onSubmit={handleSubmit} className="formulario-container">
@@ -82,12 +89,15 @@ export function Formulario() {
             required
           />
         ))}
-        <button
-          className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition"
-          type="submit"
-        >
-          Enviar
-        </button>
+
+        {formularioCompleto && (
+          <button
+            className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition-opacity duration-500 opacity-100"
+            type="submit"
+          >
+            Enviar
+          </button>
+        )}
       </form>
     </div>
   );

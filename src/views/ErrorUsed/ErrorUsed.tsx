@@ -1,9 +1,7 @@
-// src/views/ErrorUsed/ErrorUsed.tsx
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ErrorUsed.css';
-import { ROUTES } from '@/routes'; // ← usamos rutas centralizadas
+import { ROUTES } from '@/routes';
 
 export function ErrorUsed() {
   const navigate = useNavigate();
@@ -14,7 +12,7 @@ export function ErrorUsed() {
       setSeconds((prev) => {
         if (prev === 1) {
           clearInterval(countdown);
-          navigate(ROUTES.HOME); // ← usamos la constante
+          navigate(ROUTES.HOME);
         }
         return prev - 1;
       });

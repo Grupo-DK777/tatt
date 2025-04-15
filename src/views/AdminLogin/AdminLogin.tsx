@@ -39,8 +39,12 @@ export default function AdminLogin() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition"
-          type="submit">Ingresar</button>
+        <button
+          className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition"
+          type="submit"
+        >
+          Ingresar
+        </button>
       </form>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ErrorInvalid.css';
-import { ROUTES } from '@/routes'; // ← rutas centralizadas
+import { ROUTES } from '@/routes';
 
 export function ErrorInvalid() {
   const [count, setCount] = useState(5);
@@ -9,7 +9,7 @@ export function ErrorInvalid() {
 
   useEffect(() => {
     if (count === 0) {
-      navigate(ROUTES.HOME); // ← reemplazo de "/"
+      navigate(ROUTES.HOME);
       return;
     }
 
@@ -27,7 +27,7 @@ export function ErrorInvalid() {
         </p>
         <button
           className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition"
-          onClick={() => navigate(ROUTES.HOME)} // ← reemplazo del botón
+          onClick={() => navigate(ROUTES.HOME)}
         >
           Volver
         </button>

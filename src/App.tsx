@@ -7,83 +7,39 @@ import { Success } from "./views/Success/Success";
 import AdminPanel from "./views/AdminPanel/AdminPanel";
 import AdminLogin from "./views/AdminLogin/AdminLogin";
 import { ParticlesBackground } from "./components/ParticlesBackground";
-import Layout from "./components/layout/Layout";
 import Guard from "./guards/Guard";
-import { ROUTES } from "./routes"; // ← Importamos las rutas centralizadas
+import { ROUTES } from "./routes";
+import { Terminos } from "./views/Terminos/Terminos";
+import Footer from "./components/Footer"; // ← Se importa solo una vez
 
 function App() {
   return (
     <Router>
       <ParticlesBackground />
-      <main className="relative z-10 min-h-screen flex items-center justify-center p-4">
-        <Routes>
-          {/* Vista del formulario sin footer */}
-          <Route
-            path={ROUTES.FORM}
-            element={
-              <Layout excludeFooter>
-                <Formulario />
-              </Layout>
-            }
-          />
-
-          {/* Vistas públicas con footer */}
-          <Route
-            path={ROUTES.HOME}
-            element={
-              <Layout>
-                <CodeInput />
-              </Layout>
-            }
-          />
-          <Route
-            path={ROUTES.ERROR_USED}
-            element={
-              <Layout>
-                <ErrorUsed />
-              </Layout>
-            }
-          />
-          <Route
-            path={ROUTES.ERROR_INVALID}
-            element={
-              <Layout>
-                <ErrorInvalid />
-              </Layout>
-            }
-          />
-          <Route
-            path={ROUTES.SUCCESS}
-            element={
-              <Layout>
-                <Success />
-              </Layout>
-            }
-          />
-
-          {/* Vista de login */}
-          <Route
-            path={ROUTES.ADMIN_LOGIN}
-            element={
-              <Layout excludeFooter>
-                <AdminLogin />
-              </Layout>
-            }
-          />
-
-          {/* Ruta protegida con Guard */}
-          <Route
-            path={ROUTES.ADMIN_PANEL}
-            element={
-              <Guard>
-                <Layout excludeFooter>
+      <div className="min-h-screen flex flex-col justify-between relative z-10">
+        <main className="flex-grow flex items-center justify-center p-4">
+          <Routes>
+            <Route path={ROUTES.FORM} element={<Formulario />} />
+            <Route path={ROUTES.HOME} element={<CodeInput />} />
+            <Route path={ROUTES.ERROR_USED} element={<ErrorUsed />} />
+            <Route path={ROUTES.ERROR_INVALID} element={<ErrorInvalid />} />
+            <Route path={ROUTES.SUCCESS} element={<Success />} />
+            <Route path={ROUTES.TERMINOS} element={<Terminos />} />
+            <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin />} />
+            <Route
+              path={ROUTES.ADMIN_PANEL}
+              element={
+                <Guard>
                   <AdminPanel />
-                </Layout>
-              </Guard>
-            }
-          />
-        </Routes>
-      </main>
+                </Guard>
+              }
+            />
+          </Routes>
+        </main>
+
+        {/* Footer en TODAS las vistas */}
+        <Footer />
+      </div>
     </Router>
   );
 }

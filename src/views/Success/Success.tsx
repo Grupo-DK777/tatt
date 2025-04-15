@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Success.css';
-import { ROUTES } from '@/routes'; // ← usamos rutas centralizadas
+import { ROUTES } from '@/routes';
 
 export function Success() {
   const [seconds, setSeconds] = useState(5);
@@ -9,7 +9,6 @@ export function Success() {
   const { state } = useLocation();
 
   useEffect(() => {
-    // Si no hay estado (state), redirigir al ingreso del código
     if (!state?.codigo || !state?.instagram) {
       navigate(ROUTES.HOME, { replace: true });
     }
@@ -17,7 +16,7 @@ export function Success() {
     const interval = setInterval(() => {
       setSeconds((prev) => {
         if (prev === 1) {
-          clearInterval(interval); // Detener el temporizador al llegar a 0
+          clearInterval(interval);
         }
         return prev - 1;
       });
@@ -31,7 +30,7 @@ export function Success() {
                     `¡Gracias por la oportunidad!`;
     const url = `https://wa.me/573238465382?text=${encodeURIComponent(mensaje)}`;
     window.open(url, '_blank');
-    navigate(ROUTES.HOME, { replace: true }); // ← usamos la ruta centralizada
+    navigate(ROUTES.HOME, { replace: true });
   };
 
   return (
