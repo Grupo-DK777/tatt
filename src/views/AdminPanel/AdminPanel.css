@@ -1,8 +1,10 @@
 .admin-container {
   display: flex;
-  min-height: 100vh;
-  overflow: hidden;
-  background-color: white
+  align-items: flex-start;
+  background-color: white;
+  overflow: visible;
+  min-height: auto;
+  border-radius: 20px;
 }
 
 /* SIDEBAR */
@@ -15,6 +17,7 @@
   flex-direction: column;
   align-items: center;
   background-color: black;
+  border-radius: 20px;
 }
 
 .sidebar h2 {
@@ -75,17 +78,20 @@
 /* MAIN PANEL */
 .main-panel {
   flex: 1;
-  padding: 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  overflow: hidden;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  overflow-y: auto;
 }
 
 .panel-content {
-  max-width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 880px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* TÍTULOS */
@@ -109,6 +115,10 @@
 
   .main-panel {
     padding: 1rem;
+  }
+
+  .panel-content {
+    padding-bottom: 2rem;
   }
 }
 
