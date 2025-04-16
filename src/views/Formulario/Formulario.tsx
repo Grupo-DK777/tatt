@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './Formulario.css';
 import { ROUTES } from '@/routes';
 import logo from '@/public/favicon.png';
+import ValidModal from '@/components/ValidModal/ValidModal'; // ✅ importamos el modal
 
 interface Campo {
   nombre: string;
@@ -16,6 +17,7 @@ export function Formulario() {
   const [campos, setCampos] = useState<Campo[]>([]);
   const [valores, setValores] = useState<{ [key: string]: string }>({});
   const [errores, setErrores] = useState<{ [key: string]: boolean }>({});
+  const [showValidModal, setShowValidModal] = useState(true); // ✅ modal activo al inicio
 
   useEffect(() => {
     if (!state?.codigo) {
@@ -34,8 +36,10 @@ export function Formulario() {
             }))
           : [];
         setCampos(camposProcesados);
+        setShowValidModal(false); // ✅ ocultar modal cuando termina de cargar
       } catch (error) {
         console.error('Error al obtener los campos:', error);
+        setShowValidModal(false); // cerrar igual si falla
       }
     };
 
@@ -48,9 +52,9 @@ export function Formulario() {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
       case 'number':
         return !isNaN(Number(valor));
-        case 'tel':
-          const soloNumeros = valor.replace(/\D/g, '');
-          return soloNumeros.length >= 10;
+      case 'tel':
+        const soloNumeros = valor.replace(/\D/g, '');
+        return soloNumeros.length >= 10;
       case 'url':
         return /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(valor);
       default:
@@ -128,6 +132,8 @@ export function Formulario() {
 
   return (
     <div className="formulario-wrapper">
+      <ValidModal show={showValidModal} /> {/* ✅ modal de validación visible hasta cargar campos */}
+
       <form onSubmit={handleSubmit} className="formulario-container">
         <img src={logo} alt="Logo" className="codeinput-logo" />
         <h2 className="formulario-title flex items-center justify-center gap-2 text-white text-lg font-bold whitespace-nowrap">

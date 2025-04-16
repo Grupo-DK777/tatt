@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+  min-height: 100vh;
   background-color: transparent;
 }
 
@@ -34,29 +34,33 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  white-space: nowrap; /* 👈 fuerza que esté en una línea */
+  white-space: nowrap;
 }
 
-/* Campos de entrada */
-.formulario-container input {
+/* Inputs y textareas */
+.formulario-container input,
+.formulario-container textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  margin: 0.2rem 0;
   border-radius: 0.5rem;
   border: 2px solid #333;
   background-color: #1f1d2b;
   color: white;
   font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
+  resize: vertical;
+  min-height: 44px;
 }
 
-.formulario-container input:focus {
+.formulario-container input:focus,
+.formulario-container textarea:focus {
   outline: none;
   border-color: #22c55e;
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
 }
 
-.formulario-container input::placeholder {
+.formulario-container input::placeholder,
+.formulario-container textarea::placeholder {
   color: #ccc;
   text-transform: capitalize;
   letter-spacing: 0.5px;
@@ -68,14 +72,15 @@
   transform: scale(1.03);
 }
 
+/* Animación pulso para logo */
 @keyframes pulso {
   0%, 100% {
     transform: scale(1);
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
   }
   50% {
-    transform: scale(1.12); /* Se agranda suavemente */
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6)); /* Brilla */
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
   }
 }
 
@@ -89,11 +94,12 @@
   transition: transform 0.3s ease;
 }
 
+/* Estilo de errores */
 .input-error {
-  border: 2px solid #ef4444;
+  border: 2px solid #ef4444 !important;
   background-color: #fee2e2;
+  color: #b91c1c;
 }
-
 
 /* Animación de entrada */
 @keyframes fadeIn {
