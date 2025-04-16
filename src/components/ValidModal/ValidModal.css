@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: #000; /* Fondo completamente negro */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,24 +12,25 @@
   }
   
   .valid-modal-content {
-    background: transparent;
-    border-radius: 12px;
-    overflow: hidden;
     text-align: center;
     color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 10px;
+    background: transparent;
   }
   
   .valid-modal-content video {
-    width: 300px;
+    width: 480px; /* ✅ Más grande */
     max-width: 90vw;
-    border-radius: 10px;
-    box-shadow: 0 0 20px #000;
+    border-radius: 20px; /* ✅ Bordes redondeados */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
   }
   
   .valid-modal-content p {
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 1.2rem;
-    color: #facc15; /* amarillo */
     font-weight: bold;
+    color: #facc15;
   }
   
