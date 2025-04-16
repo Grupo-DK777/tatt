@@ -21,7 +21,7 @@
   }
   
   .valid-modal-content video {
-    width: 480px; /* ✅ Más grande */
+    width: 600px; /* ✅ Más grande */
     max-width: 90vw;
     border-radius: 20px; /* ✅ Bordes redondeados */
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
