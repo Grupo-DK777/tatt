@@ -41,29 +41,65 @@ export default function CamposManager() {
     }
   };
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    // Para el campo tipo, usamos el valor directamente sin conversión
+    if (name === "tipo") {
+      const tiposValidos = [
+        "text",
+        "email",
+        "number",
+        "tel",
+        "date",
+        "textarea",
+        "url",
+        "checkbox",
+      ];
+      if (!tiposValidos.includes(value)) {
+        return;
+      }
+      setNuevoCampo(prev => ({ ...prev, tipo: value }));
+      return;
+    }
+
+    setNuevoCampo(prev => ({ ...prev, [name]: value }));
+  };
+
   const agregarCampo = async () => {
     const { nombre, label, tipo } = nuevoCampo;
 
     if (!nombre || !label || !tipo) {
-      Swal.fire("Completa todos los campos", "", "warning");
+      Swal.fire("Error", "Completa todos los campos", "warning");
       return;
     }
 
     try {
+      console.log('Enviando campo:', nuevoCampo); // Debug
+
       const resultado = await addCampo({
-        ...nuevoCampo,
-        requerido: nuevoCampo.requerido === "TRUE" || nuevoCampo.requerido === true,
+        nombre,
+        label,
+        tipo: tipo, // Enviamos el tipo sin modificar
+        requerido: nuevoCampo.requerido
       });
 
       if (resultado.success) {
-        Swal.fire("Agregado", "Campo guardado en Google Sheets", "success");
-        setNuevoCampo({ nombre: "", label: "", tipo: "", requerido: "FALSE" });
-        cargarCampos();
+        await cargarCampos();
+        setNuevoCampo({
+          nombre: "",
+          label: "",
+          tipo: "",
+          requerido: "FALSE"
+        });
+        Swal.fire("Éxito", "Campo agregado correctamente", "success");
       } else {
         Swal.fire("Error", "No se pudo guardar el campo", "error");
       }
     } catch (err) {
-      console.error("Error al guardar:", err);
+      console.error('Error completo:', err);
       Swal.fire("Error", "No se pudo guardar el campo", "error");
     }
   };
@@ -79,28 +115,18 @@ export default function CamposManager() {
       if (res.isConfirmed) {
         try {
           const resultado = await deleteCampo(index);
-          console.log("Respuesta al eliminar campo:", resultado);
-
           if (resultado.success) {
             Swal.fire("Eliminado", "Campo eliminado", "success");
             cargarCampos();
           } else {
-            Swal.fire("Error", resultado.error || "No se pudo eliminar el campo", "error");
+            Swal.fire("Error", "No se pudo eliminar el campo", "error");
           }
-        } catch (err: any) {
+        } catch (err) {
           console.error("Error al eliminar:", err);
-          const msg = err?.message || "No se pudo eliminar el campo";
-          Swal.fire("Error", msg, "error");
+          Swal.fire("Error", "No se pudo eliminar el campo", "error");
         }
       }
     });
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setNuevoCampo({ ...nuevoCampo, [name]: value });
   };
 
   const totalPaginas = Math.ceil(campos.length / porPagina);
@@ -147,11 +173,17 @@ export default function CamposManager() {
               <td>{campo.nombre}</td>
               <td>{campo.label}</td>
               <td>{campo.tipo}</td>
-              <td>{campo.requerido === true || campo.requerido === "TRUE" ? "Sí" : "No"}</td>
+              <td>
+                {campo.requerido === true || campo.requerido === "TRUE"
+                  ? "Sí"
+                  : "No"}
+              </td>
               <td>
                 <button
                   className="boton-eliminar"
-                  onClick={() => eliminarCampo((pagina - 1) * porPagina + i)}
+                  onClick={() =>
+                    eliminarCampo((pagina - 1) * porPagina + i)
+                  }
                 >
                   Eliminar
                 </button>
@@ -180,7 +212,9 @@ export default function CamposManager() {
               <button
                 key={i}
                 className={`page-button ${
-                  pagina === num ? "bg-indigo-600" : "bg-gray-700 hover:bg-gray-600"
+                  pagina === num
+                    ? "bg-indigo-600"
+                    : "bg-gray-700 hover:bg-gray-600"
                 }`}
                 onClick={() => setPagina(Number(num))}
               >
@@ -214,13 +248,21 @@ export default function CamposManager() {
           value={nuevoCampo.label}
           onChange={handleInputChange}
         />
-        <input
-          type="text"
+        <select
           name="tipo"
-          placeholder="Tipo"
           value={nuevoCampo.tipo}
           onChange={handleInputChange}
-        />
+        >
+          <option value="">Selecciona tipo</option>
+          <option value="text">Texto</option>
+          <option value="email">Correo electrónico</option>
+          <option value="number">Número</option>
+          <option value="tel">Teléfono</option>
+          <option value="date">Fecha</option>
+          <option value="textarea">Área de texto</option>
+          <option value="url">URL</option>
+          <option value="checkbox">Checkbox</option>
+        </select>
         <select
           name="requerido"
           value={nuevoCampo.requerido.toString()}

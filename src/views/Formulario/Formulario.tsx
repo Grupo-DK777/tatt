@@ -4,10 +4,16 @@ import './Formulario.css';
 import { ROUTES } from '@/routes';
 import logo from '@/public/favicon.png';
 
+interface Campo {
+  nombre: string;
+  label: string;
+  tipo_input: string;
+}
+
 export function Formulario() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [campos, setCampos] = useState<string[]>([]);
+  const [campos, setCampos] = useState<Campo[]>([]);
   const [valores, setValores] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
@@ -19,8 +25,14 @@ export function Formulario() {
       try {
         const res = await fetch(import.meta.env.VITE_SHEETS_CAMPOS_URL);
         const data = await res.json();
-        const nombresCampos = data.campos.map((c: any) => c.nombre);
-        setCampos(nombresCampos);
+        const camposProcesados = Array.isArray(data.campos)
+          ? data.campos.map((c: any) => ({
+              nombre: c.nombre,
+              label: c.label || c.nombre,
+              tipo_input: c.tipo_input || 'text',
+            }))
+          : [];
+        setCampos(camposProcesados);
       } catch (error) {
         console.error('Error al obtener los campos:', error);
       }
@@ -29,7 +41,7 @@ export function Formulario() {
     fetchCampos();
   }, [state, navigate]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValores((prev) => ({ ...prev, [name]: value }));
   };
@@ -72,31 +84,40 @@ export function Formulario() {
   const formularioCompleto =
     campos.length > 0 &&
     campos.every((campo) => {
-      const valor = valores[campo];
+      const valor = valores[campo.nombre];
       return typeof valor === 'string' && valor.trim().length > 0;
     });
 
   return (
     <div className="formulario-wrapper">
       <form onSubmit={handleSubmit} className="formulario-container">
-      <img 
-  src={logo}  
-  alt="Logo" 
-  className="codeinput-logo"
-/>
+        <img src={logo} alt="Logo" className="codeinput-logo" />
         <h2 className="formulario-title flex items-center justify-center gap-2 text-white text-lg font-bold whitespace-nowrap">
           🎯 Completa tu registro
         </h2>
-        {campos.map((campo) => (
-          <input
-            key={campo}
-            name={campo}
-            placeholder={campo}
-            value={valores[campo] || ''}
-            onChange={handleChange}
-            required
-          />
-        ))}
+
+        {campos.map((campo) =>
+          campo.tipo_input === 'textarea' ? (
+            <textarea
+              key={campo.nombre}
+              name={campo.nombre}
+              placeholder={campo.label}
+              value={valores[campo.nombre] || ''}
+              onChange={handleChange}
+              required
+            />
+          ) : (
+            <input
+              key={campo.nombre}
+              type={campo.tipo_input}
+              name={campo.nombre}
+              placeholder={campo.label}
+              value={valores[campo.nombre] || ''}
+              onChange={handleChange}
+              required
+            />
+          )
+        )}
 
         {formularioCompleto && (
           <button

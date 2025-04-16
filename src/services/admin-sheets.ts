@@ -8,26 +8,39 @@ export const getCampos = async () => {
   return res.json();
 };
 
-export const addCampo = async (campo: {
-  nombre: string;
-  label: string;
-  tipo: string;
-  requerido: string | boolean;
-}) => {
+// En la función addCampo, cambia CAMPOS_URl por BASE_SHEETS_URL
+export const addCampo = async (campo: { nombre: string; label: string; tipo: string; requerido: string | boolean }) => {
   const params = new URLSearchParams();
   params.append("tipo", "campos");
+  params.append("modo", "agregar");
   params.append("nombre", campo.nombre);
   params.append("label", campo.label);
-  params.append("tipo", campo.tipo);
-  params.append("requerido", campo.requerido.toString());
+  params.append("tipo_campo", campo.tipo); // Cambiamos a tipo_campo
+  params.append("tipo_input", campo.tipo); // Mantenemos tipo_input también por compatibilidad
+  params.append("requerido", campo.requerido.toString().toUpperCase());
+
+  // Log para debug
+  console.log('Params enviados:', {
+    tipo: "campos",
+    modo: "agregar",
+    nombre: campo.nombre,
+    label: campo.label,
+    tipo_campo: campo.tipo,
+    tipo_input: campo.tipo,
+    requerido: campo.requerido.toString().toUpperCase()
+  });
 
   const res = await fetch(BASE_SHEETS_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
     body: params.toString(),
   });
 
-  return res.json();
+  const data = await res.json();
+  console.log('Respuesta del servidor:', data);
+  return data;
 };
 
 export const deleteCampo = async (index: number) => {
