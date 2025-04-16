@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000; /* Fondo completamente negro */
+    background-color: #000; /* Fondo negro uniforme */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,23 +14,34 @@
   .valid-modal-content {
     text-align: center;
     color: white;
-    border-radius: 20px;
-    overflow: hidden;
-    padding: 10px;
+    padding: 0;
     background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
   
+  /* Eliminamos bordes redondeados y sombras para que el video se funda con el fondo */
   .valid-modal-content video {
-    width: 600px; /* ✅ Más grande */
-    max-width: 90vw;
-    border-radius: 20px; /* ✅ Bordes redondeados */
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* ✅ importante: cubre todo sin bordes */
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
   }
   
+  /* Texto centrado en la parte inferior del video */
   .valid-modal-content p {
-    margin-top: 15px;
-    font-size: 1.2rem;
-    font-weight: bold;
+    position: absolute;
+    bottom: 3rem;
     color: #facc15;
+    font-size: 1.25rem;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.6); /* fondo sutil detrás del texto */
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
   }
   
