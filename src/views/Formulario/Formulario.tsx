@@ -48,8 +48,9 @@ export function Formulario() {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
       case 'number':
         return !isNaN(Number(valor));
-      case 'tel':
-        return /^[0-9+\-()\s]+$/.test(valor);
+        case 'tel':
+          const soloNumeros = valor.replace(/\D/g, '');
+          return soloNumeros.length >= 10;
       case 'url':
         return /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(valor);
       default:
