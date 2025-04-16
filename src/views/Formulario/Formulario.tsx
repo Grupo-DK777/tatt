@@ -70,10 +70,14 @@ export function Formulario() {
     }
   };
 
+  const formularioValido = campos.length > 0 && campos.every((campo) => {
+    const valor = valores[campo.nombre] || '';
+    return validarCampo(campo, valor);
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validación final
     const nuevosErrores: { [key: string]: boolean } = {};
     campos.forEach((campo) => {
       const valor = valores[campo.nombre] || '';
@@ -154,12 +158,14 @@ export function Formulario() {
           )
         )}
 
-        <button
-          className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition-opacity duration-500 opacity-100"
-          type="submit"
-        >
-          Enviar
-        </button>
+        {formularioValido && (
+          <button
+            className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition-opacity duration-500 opacity-100"
+            type="submit"
+          >
+            Enviar
+          </button>
+        )}
       </form>
     </div>
   );
