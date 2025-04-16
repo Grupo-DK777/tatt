@@ -89,6 +89,12 @@
   transition: transform 0.3s ease;
 }
 
+.input-error {
+  border: 2px solid #ef4444;
+  background-color: #fee2e2;
+}
+
+
 /* Animación de entrada */
 @keyframes fadeIn {
   from {

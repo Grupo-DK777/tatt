@@ -15,6 +15,7 @@ export function Formulario() {
   const navigate = useNavigate();
   const [campos, setCampos] = useState<Campo[]>([]);
   const [valores, setValores] = useState<{ [key: string]: string }>({});
+  const [errores, setErrores] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     if (!state?.codigo) {
@@ -41,13 +42,52 @@ export function Formulario() {
     fetchCampos();
   }, [state, navigate]);
 
+  const validarCampo = (campo: Campo, valor: string) => {
+    switch (campo.tipo_input) {
+      case 'email':
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+      case 'number':
+        return !isNaN(Number(valor));
+      case 'tel':
+        return /^[0-9+\-()\s]+$/.test(valor);
+      case 'url':
+        return /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(valor);
+      default:
+        return valor.trim().length > 0;
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValores((prev) => ({ ...prev, [name]: value }));
+
+    const campo = campos.find(c => c.nombre === name);
+    if (campo) {
+      setErrores((prev) => ({
+        ...prev,
+        [name]: !validarCampo(campo, value)
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validación final
+    const nuevosErrores: { [key: string]: boolean } = {};
+    campos.forEach((campo) => {
+      const valor = valores[campo.nombre] || '';
+      nuevosErrores[campo.nombre] = !validarCampo(campo, valor);
+    });
+
+    setErrores(nuevosErrores);
+
+    const hayErrores = Object.values(nuevosErrores).some((err) => err === true);
+    if (hayErrores) {
+      alert('Por favor corrige los errores antes de enviar.');
+      return;
+    }
+
     const datos = {
       tipo: 'registro',
       codigo: state?.codigo || '',
@@ -81,13 +121,6 @@ export function Formulario() {
     }
   };
 
-  const formularioCompleto =
-    campos.length > 0 &&
-    campos.every((campo) => {
-      const valor = valores[campo.nombre];
-      return typeof valor === 'string' && valor.trim().length > 0;
-    });
-
   return (
     <div className="formulario-wrapper">
       <form onSubmit={handleSubmit} className="formulario-container">
@@ -105,6 +138,7 @@ export function Formulario() {
               value={valores[campo.nombre] || ''}
               onChange={handleChange}
               required
+              className={errores[campo.nombre] ? 'input-error' : ''}
             />
           ) : (
             <input
@@ -115,18 +149,17 @@ export function Formulario() {
               value={valores[campo.nombre] || ''}
               onChange={handleChange}
               required
+              className={errores[campo.nombre] ? 'input-error' : ''}
             />
           )
         )}
 
-        {formularioCompleto && (
-          <button
-            className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition-opacity duration-500 opacity-100"
-            type="submit"
-          >
-            Enviar
-          </button>
-        )}
+        <button
+          className="bg-green-500 hover:bg-green-600 text-black font-semibold py-2 px-6 rounded transition-opacity duration-500 opacity-100"
+          type="submit"
+        >
+          Enviar
+        </button>
       </form>
     </div>
   );
