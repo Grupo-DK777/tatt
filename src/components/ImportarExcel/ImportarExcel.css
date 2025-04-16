@@ -1,0 +1,26 @@
+.importar-excel-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .importar-btn {
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .importar-btn:hover {
+    background-color: #4338ca;
+  }
+  
+  .importar-input {
+    display: none;
+  }
+  

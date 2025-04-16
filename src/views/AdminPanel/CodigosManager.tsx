@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getCodigos, addCodigo, deleteCodigo } from "../../services/admin-sheets";
+import ImportarExcel from "@/components/ImportarExcel/ImportarExcel"; // ✅ nuevo import
 import "./AdminTables.css";
 
 export default function CodigosManager() {
@@ -158,6 +159,9 @@ export default function CodigosManager() {
             Agregar
           </button>
         </div>
+
+        {/* ✅ Sección de importar Excel */}
+        <ImportarExcel />
       </div>
     </div>
   );
