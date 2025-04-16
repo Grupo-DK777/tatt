@@ -43,11 +43,44 @@ export default function RegistrosManager() {
   };
 
   const exportarXLSX = () => {
-    const ws = XLSX.utils.json_to_sheet(registros);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Registros");
+    // Excluir el campo 'timestamp' al exportar
+    const registrosSinTimestamp = registros.map(({ timestamp, ...rest }) => rest);
 
-    XLSX.writeFile(wb, "registros.xlsx");
+    if (registrosSinTimestamp.length === 0) {
+      Swal.fire({
+        title: "Sin registros",
+        text: "No hay registros disponibles para exportar.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Exportar a Excel?",
+      html: `Se exportarán <b>${registrosSinTimestamp.length}</b> registros sin el campo <code>timestamp</code>`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "📥 Descargar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#22c55e",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const ws = XLSX.utils.json_to_sheet(registrosSinTimestamp);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Registros");
+        XLSX.writeFile(wb, "registros.xlsx");
+
+        Swal.fire({
+          title: "¡Descargado!",
+          text: `Se exportaron correctamente ${registrosSinTimestamp.length} registros.`,
+          icon: "success",
+          timer: 2500,
+          showConfirmButton: false,
+        });
+      }
+    });
   };
 
   const totalPaginas = Math.ceil(registros.length / porPagina);
@@ -79,25 +112,27 @@ export default function RegistrosManager() {
   return (
     <div className="tabla-wrapper">
       <button className="boton-exportar" onClick={exportarXLSX}>
-      📥 Exportar a Excel
+        📥 Exportar a Excel
       </button>
 
       <table className="tabla-admin">
         <thead>
           <tr>
             {registros[0] &&
-              Object.keys(registros[0]).map((key) => (
-                <th key={key}>{key}</th>
-              ))}
+              Object.keys(registros[0])
+                .filter((key) => key !== "timestamp")
+                .map((key) => <th key={key}>{key}</th>)}
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {registrosPaginados.map((row, i) => (
             <tr key={i}>
-              {Object.values(row).map((val, j) => (
-                <td key={j}>{String(val)}</td>
-              ))}
+              {Object.entries(row)
+                .filter(([key]) => key !== "timestamp")
+                .map(([_, val], j) => (
+                  <td key={j}>{String(val)}</td>
+                ))}
               <td>
                 <button
                   className="boton-eliminar"
