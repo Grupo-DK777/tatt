@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '@/views/CodeInput/CodeInput.css';
 import { ROUTES } from '@/routes';
 import TermsModal from '@/components/TermsModal/TermsModal';
+import ValidModal from '@/components/ValidModal/ValidModal'; // ✅ nuevo import
 import logo from '@/public/favicon.png';
 
 const SHEET_URL = import.meta.env.VITE_SHEETS_CODIGOS_URL;
@@ -11,9 +12,10 @@ export default function CodeInput() {
   const [codigo, setCodigo] = useState('');
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showValidModal, setShowValidModal] = useState(false); // ✅ estado del modal
   const [errorCodigo, setErrorCodigo] = useState('');
   const [errorCheckbox, setErrorCheckbox] = useState('');
-  const [showModal, setShowModal] = useState(false);
 
   const [totalCodigos, setTotalCodigos] = useState(0);
   const [codigosDisponibles, setCodigosDisponibles] = useState(0);
@@ -59,6 +61,7 @@ export default function CodeInput() {
     if (!valid) return;
 
     setLoading(true);
+    setShowValidModal(true); // ✅ mostrar modal de carga con video
 
     try {
       const res = await fetch(SHEET_URL);
@@ -68,6 +71,8 @@ export default function CodeInput() {
       const found = data.codigos.find(
         (c: any) => String(c.codigo).trim().toUpperCase() === input
       );
+
+      setShowValidModal(false); // ✅ ocultar modal tras la validación
 
       if (!found) {
         navigate(ROUTES.ERROR_INVALID);
@@ -83,6 +88,7 @@ export default function CodeInput() {
       navigate(ROUTES.FORM, { state: { codigo: input } });
     } catch (err) {
       console.error('Error al validar el código:', err);
+      setShowValidModal(false);
     } finally {
       setLoading(false);
     }
@@ -113,14 +119,11 @@ export default function CodeInput() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center px-4">
-      <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
+      <ValidModal show={showValidModal} /> {/* ✅ modal con video */}
 
-        {/* ✅ Logo arriba del título */}
-        <img 
-  src={logo}  
-  alt="Logo" 
-  className="codeinput-logo"
-/>
+      <div className="bg-[#1c1b2a]/80 p-8 rounded-lg shadow-lg max-w-md w-full animate-fadeIn">
+        <img src={logo} alt="Logo" className="codeinput-logo" />
+
         <h1 className="text-2xl font-semibold text-white text-center mb-4">
           🎁 Valida tu código
         </h1>
@@ -167,13 +170,14 @@ export default function CodeInput() {
             : 'Validar código'}
         </button>
 
-        {/* Barra de porcentaje debajo */}
         <div className="mt-6 w-full text-sm text-left">
           <p className="mb-1 text-white">
             {codigosDisponibles === 0 ? (
               <span className="text-red-500 font-semibold">¡Sin códigos disponibles!</span>
             ) : (
-              <>Disponibles: <span className="text-yellow-400">{codigosDisponibles}</span> de {totalCodigos} códigos</>
+              <>
+                Disponibles: <span className="text-yellow-400">{codigosDisponibles}</span> de {totalCodigos} códigos
+              </>
             )}
           </p>
           <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
