@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getRegistros, deleteRegistro } from "../../services/admin-sheets";
+import * as XLSX from "xlsx";
 import "./AdminTables.css";
 
 export default function RegistrosManager() {
@@ -19,7 +20,6 @@ export default function RegistrosManager() {
       : Array.isArray(response.registro)
       ? response.registro
       : [];
-
     setRegistros(data);
   };
 
@@ -40,6 +40,14 @@ export default function RegistrosManager() {
         }
       }
     });
+  };
+
+  const exportarXLSX = () => {
+    const ws = XLSX.utils.json_to_sheet(registros);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Registros");
+
+    XLSX.writeFile(wb, "registros.xlsx");
   };
 
   const totalPaginas = Math.ceil(registros.length / porPagina);
@@ -70,6 +78,10 @@ export default function RegistrosManager() {
 
   return (
     <div className="tabla-wrapper">
+      <button className="boton-exportar" onClick={exportarXLSX}>
+      📥 Exportar a Excel
+      </button>
+
       <table className="tabla-admin">
         <thead>
           <tr>
@@ -101,7 +113,7 @@ export default function RegistrosManager() {
         </tbody>
       </table>
 
-      {/* Paginación Mejorada */}
+      {/* Paginación */}
       {totalPaginas > 1 && (
         <div className="pagination">
           <button
@@ -113,12 +125,16 @@ export default function RegistrosManager() {
 
           {generarRangoPaginado().map((num, i) =>
             num === "..." ? (
-              <span key={i} style={{ padding: "0 8px" }}>...</span>
+              <span key={i} style={{ padding: "0 8px" }}>
+                ...
+              </span>
             ) : (
               <button
                 key={i}
                 className={`page-button ${
-                  pagina === num ? "bg-indigo-600" : "bg-gray-700 hover:bg-gray-600"
+                  pagina === num
+                    ? "bg-indigo-600"
+                    : "bg-gray-700 hover:bg-gray-600"
                 }`}
                 onClick={() => setPagina(Number(num))}
               >
