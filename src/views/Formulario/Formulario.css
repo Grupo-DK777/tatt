@@ -101,6 +101,17 @@
   color: #b91c1c;
 }
 
+/* Ocultar flechas en input tipo number (todos los navegadores) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
 /* Animación de entrada */
 @keyframes fadeIn {
   from {
