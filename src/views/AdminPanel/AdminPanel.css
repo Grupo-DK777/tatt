@@ -1,10 +1,11 @@
 .admin-container {
   display: flex;
-  align-items: flex-start;
   background-color: white;
-  overflow: visible;
-  min-height: auto;
-  border-radius: 20px;
+  border-radius: 1rem;
+  overflow: hidden;
+  max-width: 960px;
+  margin: 2rem auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 /* SIDEBAR */
@@ -12,12 +13,12 @@
   width: 250px;
   color: white;
   padding: 2rem 1rem;
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: black;
-  border-radius: 20px;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
 }
 
 .sidebar h2 {
@@ -78,15 +79,16 @@
 /* MAIN PANEL */
 .main-panel {
   flex: 1;
+  padding: 2rem;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 2rem;
-  overflow-y: auto;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 
 .panel-content {
-  background-color: #ffffff;
   width: 100%;
   max-width: 880px;
   display: flex;
@@ -106,30 +108,22 @@
 @media (max-width: 768px) {
   .admin-container {
     flex-direction: column;
+    border-radius: 0;
+    margin: 0;
   }
 
   .sidebar {
     width: 100%;
     text-align: center;
+    border-radius: 0;
   }
 
   .main-panel {
     padding: 1rem;
+    border-radius: 0;
   }
 
   .panel-content {
     padding-bottom: 2rem;
-  }
-}
-
-/* ANIMACIÓN */
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0px rgba(255, 255, 255, 0.3);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
 }
