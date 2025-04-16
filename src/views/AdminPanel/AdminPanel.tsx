@@ -1,16 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ para navegación programática
 import CamposManager from "./CamposManager";
 import CodigosManager from "./CodigosManager";
 import RegistrosManager from "./RegistrosManager";
 import logo from "@/public/favicon.png";
 import "./AdminPanel.css";
+import { ROUTES } from "@/routes"; // ✅ importa rutas centralizadas
 
 export default function AdminPanel() {
   const [seccion, setSeccion] = useState<"campos" | "codigos" | "registros">("campos");
+  const navigate = useNavigate();
 
   const cerrarSesion = () => {
-    localStorage.clear(); // o solo: localStorage.removeItem("token");
-    window.location.reload(); // o redirigir a login si aplica
+    localStorage.clear();
+    navigate(ROUTES.ADMIN_LOGIN); // ✅ redirige a /admin-login
   };
 
   return (
