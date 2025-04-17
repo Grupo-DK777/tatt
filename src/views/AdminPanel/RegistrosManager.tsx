@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { getRegistros, deleteRegistro } from "../../services/admin-sheets";
+import { getRegistros, deleteRegistro, getCampos } from "../../services/admin-sheets";
 import * as XLSX from "xlsx";
 import "./AdminTables.css";
 
 export default function RegistrosManager() {
-  const [registros, setRegistros] = useState<any[]>([]);
+  const [registros, setRegistros] = useState<Record<string, any>[]>([]);
+  const [camposActivos, setCamposActivos] = useState<string[]>([]);
   const [pagina, setPagina] = useState(1);
   const porPagina = 10;
 
   useEffect(() => {
     cargarRegistros();
+    cargarCamposActivos();
   }, []);
 
   const cargarRegistros = async () => {
@@ -21,6 +23,22 @@ export default function RegistrosManager() {
       ? response.registro
       : [];
     setRegistros(data);
+  };
+
+  const cargarCamposActivos = async () => {
+    const response = await getCampos();
+    const data = Array.isArray(response)
+      ? response
+      : Array.isArray(response.campos)
+      ? response.campos
+      : [];
+
+    const filtrados = data
+      .filter((c: any) => c.guardar_en_registro === true || c.guardar_en_registro === "TRUE")
+      .map((c: any) => c.nombre?.trim())
+      .filter(Boolean);
+
+    setCamposActivos(filtrados);
   };
 
   const eliminarRegistro = async (index: number) => {
@@ -43,22 +61,27 @@ export default function RegistrosManager() {
   };
 
   const exportarXLSX = () => {
-    // Excluir el campo 'timestamp' al exportar
-    const registrosSinTimestamp = registros.map(({ timestamp, ...rest }) => rest);
-
-    if (registrosSinTimestamp.length === 0) {
+    if (registros.length === 0 || camposActivos.length === 0) {
       Swal.fire({
-        title: "Sin registros",
-        text: "No hay registros disponibles para exportar.",
+        title: "Sin datos",
+        text: "No hay registros o campos disponibles.",
         icon: "warning",
         confirmButtonText: "Ok",
       });
       return;
     }
 
+    const exportData = registros.map((row) => {
+      const newRow: Record<string, any> = {};
+      camposActivos.forEach((campo) => {
+        newRow[campo] = row[campo] ?? "";
+      });
+      return newRow;
+    });
+
     Swal.fire({
       title: "¿Exportar a Excel?",
-      html: `Se exportarán <b>${registrosSinTimestamp.length}</b> registros sin el campo <code>timestamp</code>`,
+      html: `Se exportarán <b>${exportData.length}</b> registros con <b>${camposActivos.length}</b> campos activos.`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "📥 Descargar",
@@ -67,14 +90,14 @@ export default function RegistrosManager() {
       cancelButtonColor: "#d33",
     }).then((result) => {
       if (result.isConfirmed) {
-        const ws = XLSX.utils.json_to_sheet(registrosSinTimestamp);
+        const ws = XLSX.utils.json_to_sheet(exportData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Registros");
         XLSX.writeFile(wb, "registros.xlsx");
 
         Swal.fire({
           title: "¡Descargado!",
-          text: `Se exportaron correctamente ${registrosSinTimestamp.length} registros.`,
+          text: `Se exportaron correctamente ${exportData.length} registros.`,
           icon: "success",
           timer: 2500,
           showConfirmButton: false,
@@ -118,21 +141,20 @@ export default function RegistrosManager() {
       <table className="tabla-admin">
         <thead>
           <tr>
-            {registros[0] &&
-              Object.keys(registros[0])
-                .filter((key) => key !== "timestamp")
-                .map((key) => <th key={key}>{key}</th>)}
+            {camposActivos.map((campo) => (
+              <th key={campo}>{campo}</th>
+            ))}
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {registrosPaginados.map((row, i) => (
             <tr key={i}>
-              {Object.entries(row)
-                .filter(([key]) => key !== "timestamp")
-                .map(([_, val], j) => (
-                  <td key={j}>{String(val)}</td>
-                ))}
+              {camposActivos.map((campo, j) => (
+                <td key={j}>
+                  {String((row as Record<string, any>)[campo] ?? "")}
+                </td>
+              ))}
               <td>
                 <button
                   className="boton-eliminar"
@@ -148,7 +170,6 @@ export default function RegistrosManager() {
         </tbody>
       </table>
 
-      {/* Paginación */}
       {totalPaginas > 1 && (
         <div className="pagination">
           <button

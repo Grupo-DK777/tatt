@@ -8,6 +8,7 @@ interface Campo {
   label: string;
   tipo: string;
   requerido: boolean | string;
+  guardar_en_registro?: boolean;
 }
 
 export default function CamposManager() {
@@ -17,6 +18,7 @@ export default function CamposManager() {
     label: "",
     tipo: "",
     requerido: "FALSE",
+    guardar_en_registro: true,
   });
 
   const [pagina, setPagina] = useState(1);
@@ -44,46 +46,38 @@ export default function CamposManager() {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+    const checked = target.checked;
 
-    // Para el campo tipo, usamos el valor directamente sin conversión
-    if (name === "tipo") {
-      const tiposValidos = [
-        "text",
-        "email",
-        "number",
-        "tel",
-        "date",
-        "textarea",
-        "url",
-        "checkbox",
-      ];
-      if (!tiposValidos.includes(value)) {
-        return;
-      }
-      setNuevoCampo(prev => ({ ...prev, tipo: value }));
-      return;
+    if (type === "checkbox") {
+      setNuevoCampo((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setNuevoCampo((prev) => ({ ...prev, [name]: value }));
     }
-
-    setNuevoCampo(prev => ({ ...prev, [name]: value }));
   };
 
   const agregarCampo = async () => {
-    const { nombre, label, tipo } = nuevoCampo;
+    const { nombre, label, tipo, requerido, guardar_en_registro } = nuevoCampo;
 
-    if (!nombre || !label || !tipo) {
-      Swal.fire("Error", "Completa todos los campos", "warning");
+    if (!nombre.trim() || !label.trim() || !tipo) {
+      Swal.fire("Error", "Completa todos los campos correctamente", "warning");
+      return;
+    }
+
+    const existe = campos.some((c) => c.nombre === nombre.trim());
+    if (existe) {
+      Swal.fire("Error", "Ya existe un campo con ese nombre", "error");
       return;
     }
 
     try {
-      console.log('Enviando campo:', nuevoCampo); // Debug
-
       const resultado = await addCampo({
-        nombre,
-        label,
-        tipo: tipo, // Enviamos el tipo sin modificar
-        requerido: nuevoCampo.requerido
+        nombre: nombre.trim(),
+        label: label.trim(),
+        tipo,
+        requerido,
+        guardar_en_registro: guardar_en_registro ?? true,
       });
 
       if (resultado.success) {
@@ -92,15 +86,16 @@ export default function CamposManager() {
           nombre: "",
           label: "",
           tipo: "",
-          requerido: "FALSE"
+          requerido: "FALSE",
+          guardar_en_registro: true,
         });
         Swal.fire("Éxito", "Campo agregado correctamente", "success");
       } else {
         Swal.fire("Error", "No se pudo guardar el campo", "error");
       }
     } catch (err) {
-      console.error('Error completo:', err);
-      Swal.fire("Error", "No se pudo guardar el campo", "error");
+      console.error("Error al guardar:", err);
+      Swal.fire("Error", "Ocurrió un error al guardar el campo", "error");
     }
   };
 
@@ -173,11 +168,7 @@ export default function CamposManager() {
               <td>{campo.nombre}</td>
               <td>{campo.label}</td>
               <td>{campo.tipo}</td>
-              <td>
-                {campo.requerido === true || campo.requerido === "TRUE"
-                  ? "Sí"
-                  : "No"}
-              </td>
+              <td>{campo.requerido === true || campo.requerido === "TRUE" ? "Sí" : "No"}</td>
               <td>
                 <button
                   className="boton-eliminar"
@@ -205,9 +196,7 @@ export default function CamposManager() {
 
           {generarRangoPaginado().map((num, i) =>
             num === "..." ? (
-              <span key={i} className="ellipsis">
-                ...
-              </span>
+              <span key={i} className="ellipsis">...</span>
             ) : (
               <button
                 key={i}
@@ -271,6 +260,19 @@ export default function CamposManager() {
           <option value="TRUE">Requerido</option>
           <option value="FALSE">Opcional</option>
         </select>
+        <div className="flex items-center gap-2 mt-2 ml-4">
+          <label htmlFor="guardar_en_registro" className="text-sm text-black whitespace-nowrap" title="Si se marca, este campo aparecerá en la hoja de registros.">
+            Incluir en registros
+          </label>
+          <input
+            id="guardar_en_registro"
+            type="checkbox"
+            name="guardar_en_registro"
+            checked={nuevoCampo.guardar_en_registro ?? true}
+            onChange={handleInputChange}
+            className="w-4 h-4 accent-green-500"
+          />
+        </div>
       </div>
 
       <button className="boton-agregar" onClick={agregarCampo}>
